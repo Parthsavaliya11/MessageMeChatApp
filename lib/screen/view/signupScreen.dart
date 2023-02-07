@@ -65,6 +65,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    Get.closeCurrentSnackbar();
   }
 }

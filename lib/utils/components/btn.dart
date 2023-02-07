@@ -1,10 +1,13 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:messageme/screen/controller/login_controller.dart';
-import 'package:messageme/screen/view/signupScreen.dart';
+import 'package:messageme/screen/controller/profileset_controller.dart';
 import 'package:messageme/utils/constant/const_color.dart';
 import 'package:messageme/utils/fireauth_helper.dart';
+import 'package:messageme/utils/firestore_helper.dart';
+import 'package:messageme/utils/storage_helper.dart';
 
 import '../../screen/controller/signup_controller.dart';
 
@@ -20,10 +23,14 @@ Widget loginbtn() {
         ),
       ),
       onPressed: () async {
-        String msg = await FireauthHelper.AuthHelper.customLogin(
+        String msg = await FireauthHelper.AuthHelper.CheckCustomUser(
             email: LoginController.Controller.txt_in_email.text,
             password: LoginController.Controller.txt_in_password.text);
         Get.snackbar("MessageMe", msg);
+
+        if (msg == "User Success To Login") {
+          Get.offAllNamed("/home");
+        }
       },
       child: const Text(
         "Login",
@@ -73,14 +80,74 @@ Widget createAcc() {
           ),
         ),
         onPressed: () async {
-          String msg = await FireauthHelper.AuthHelper.CheckCustomUser(
+          String msg = await FireauthHelper.AuthHelper.customLogin(
               email: SignupController.Controller.txt_up_email.text,
               password: SignupController.Controller.txt_up_password.text);
           Get.snackbar("MessageMe", msg);
+          if (msg == "User Success To Create Account") {
+            Get.offNamed("/profileset");
+          }
         },
         child: const Text(
           "Create a new account",
           style: TextStyle(fontSize: 16, color: Colors.white),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget profilebtn({required String imgpath}) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+    child: SizedBox(
+      height: 60.h,
+      width: double.infinity,
+      child: Obx(
+        () => ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: bluecolor,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          onPressed: ProfilesetController.Controller.isbtn.value
+              ? null
+              : () async {
+                  log("$imgpath egeoe");
+                  if ((ProfilesetController.Controller.txt_name.text != "") &&
+                      (ProfilesetController.Controller.txt_no.text != "") &&
+                      (imgpath != "")) {
+                    ProfilesetController.Controller.isbtn.value = true;
+                    String? imglink =
+                        await StorageHelper.storage.Uploadimg(imglink: imgpath);
+                    FirestoreHelper.firestore.ProfileData(
+                        username: ProfilesetController.Controller.txt_name.text,
+                        mobile: ProfilesetController.Controller.txt_no.text,
+                        profileimg: imglink!);
+                    Get.offAllNamed('/home');
+                  } else {
+                    Get.showSnackbar(const GetSnackBar(
+                      title: "MessageMe",
+                      message: "Field is empty",
+                      margin: EdgeInsets.all(15),
+                      borderRadius: 15,
+                      barBlur: 10,
+                      duration: Duration(seconds: 2),
+                      snackStyle: SnackStyle.FLOATING,
+                      snackPosition: SnackPosition.BOTTOM,
+                    ));
+                  }
+                },
+          child: ProfilesetController.Controller.isbtn.value
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : const Text(
+                  "Create a new account",
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
         ),
       ),
     ),

@@ -16,7 +16,7 @@ class FireauthHelper {
         email: email,
         password: password,
       );
-      return "User Success To Login";
+      return "User Success To Create Account";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -37,7 +37,7 @@ class FireauthHelper {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      return "User Success To Signup";
+      return "User Success To Login";
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');

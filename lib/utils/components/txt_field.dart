@@ -4,17 +4,44 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 Widget txt_field(
     {TextEditingController? textEditingController,
     required String hint,
-    TextInputType? textInputType,String? Helper,TextInputAction? txtaction}) {
+    TextInputType? textInputType,
+    String? Helper,
+    TextInputAction? txtaction,
+    int? max}) {
+  return TextField(
+    textInputAction: txtaction,
+
+    keyboardType: textInputType,
+    controller: textEditingController,
+    maxLength: max,
+    decoration: InputDecoration(
+      hintText: hint,
+      helperText: Helper,
+      hintStyle: TextStyle(fontSize: 16.sp),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+    ),
+  );
+}
+
+Widget fill_txt_field(
+    {TextEditingController? textEditingController,
+    required String hint,
+    TextInputType? textInputType,
+    String? Helper,
+    TextInputAction? txtaction}) {
   return TextField(
     textInputAction: txtaction,
     keyboardType: textInputType,
     controller: textEditingController,
     decoration: InputDecoration(
-      hintText: hint,helperText: Helper,
+      fillColor: const Color(0xffE0E0E0),
+      hintText: hint,
+      helperText: Helper,
       hintStyle: TextStyle(fontSize: 16.sp),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      border: InputBorder.none,
+      filled: true,
     ),
   );
 }

@@ -33,11 +33,17 @@ class _SpleshScreenState extends State<SpleshScreen> {
   }
 }
 
-void checkUser(){
+void checkUser() {
   bool check = FireauthHelper.AuthHelper.isLogin();
   if (check == true) {
-    Timer(const Duration(seconds: 4), () => Get.offAllNamed('/login'));
+    Timer(
+      const Duration(seconds: 4),
+      () => Get.offAllNamed('/home'),
+    );
   } else {
-    Timer(const Duration(seconds: 4), () => Get.offAllNamed('/signup'));
+    Timer(
+      const Duration(seconds: 4),
+      () => Get.offAllNamed('/login'),
+    );
   }
 }

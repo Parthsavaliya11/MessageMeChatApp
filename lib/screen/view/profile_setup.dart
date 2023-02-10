@@ -8,6 +8,7 @@ import 'package:messageme/screen/controller/profileset_controller.dart';
 import 'package:messageme/utils/components/appbar.dart';
 import 'package:messageme/utils/components/btn.dart';
 import 'package:messageme/utils/components/txt_field.dart';
+import 'package:messageme/utils/constant/const_color.dart';
 import 'package:messageme/utils/constant/const_sizebox.dart';
 
 class ProfileSetup extends StatefulWidget {
@@ -24,7 +25,6 @@ class _ProfileSetupState extends State<ProfileSetup> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: Backbar("Fill Profile", Colors.black),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -58,6 +58,7 @@ class _ProfileSetupState extends State<ProfileSetup> {
                         bottom: 5.r,
                         right: 0,
                         child: CircleAvatar(
+                          backgroundColor: bluecolor,
                           child: IconButton(
                             onPressed: () async {
                               ProfilesetController.Controller.img_path.value =
@@ -84,11 +85,20 @@ class _ProfileSetupState extends State<ProfileSetup> {
                       textInputType: TextInputType.name),
                   h(26.h),
                   txt_field(
-                      max: 10,
-                      hint: "Mobile Number",
-                      textInputType: TextInputType.phone,
+                      max: 20,
+                      txtaction: TextInputAction.next,
+                      hint: "AboutMe",
                       textEditingController:
-                          ProfilesetController.Controller.txt_no),
+                          ProfilesetController.Controller.txt_about,
+                      textInputType: TextInputType.multiline),
+                  h(26.h),
+                  txt_field(
+                    max: 10,
+                    hint: "Mobile Number",
+                    textInputType: TextInputType.phone,
+                    textEditingController:
+                        ProfilesetController.Controller.txt_no,
+                  ),
                 ],
               ),
             ),

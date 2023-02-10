@@ -10,7 +10,7 @@ AppBar Backbar(String title,Color txtcolor) {
         onPressed: () {
           Get.back();
         },
-        icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 18.sp)),
+        icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 18)),
     centerTitle: true,
     elevation: 0,
     backgroundColor: Colors.transparent,

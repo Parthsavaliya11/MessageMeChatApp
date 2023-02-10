@@ -1,11 +1,13 @@
 import 'dart:async';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:messageme/utils/constant/const_color.dart';
 import 'package:messageme/utils/fireauth_helper.dart';
+import 'package:messageme/utils/get_storage.dart';
 
 class SpleshScreen extends StatefulWidget {
   const SpleshScreen({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class _SpleshScreenState extends State<SpleshScreen> {
 }
 
 void checkUser() {
+
   bool check = FireauthHelper.AuthHelper.isLogin();
   if (check == true) {
     Timer(

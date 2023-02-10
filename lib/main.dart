@@ -4,8 +4,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:material_color_generator/material_color_generator.dart';
 import 'package:messageme/firebase_options.dart';
-import 'package:messageme/utils/constant/const_color.dart';
 import 'package:messageme/utils/routes.dart';
+
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,8 @@ void main() async {
       builder: (BuildContext context, Widget? child) {
         return GetMaterialApp(
           theme: ThemeData(
-            primarySwatch: generateMaterialColor(
+
+             primarySwatch: generateMaterialColor(
               color: const Color(0xff3361E1),
             ),
           ),

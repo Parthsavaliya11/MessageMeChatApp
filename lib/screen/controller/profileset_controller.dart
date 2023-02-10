@@ -14,6 +14,7 @@ class ProfilesetController extends GetxController {
   static final Controller = ProfilesetController._();
   TextEditingController txt_name = TextEditingController();
   TextEditingController txt_no = TextEditingController();
+  TextEditingController txt_about = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   RxString img_path = "".obs;
   RxBool isbtn = false.obs;
@@ -46,7 +47,7 @@ class ProfilesetController extends GetxController {
     File file = File(croppedFile!.path);
     var compressfile = await FlutterImageCompress.compressAndGetFile(
         file.absolute.path, '${file.path}compress.jpg',
-        quality: 50);
+        quality: 40);
     log("$compressfile -----------------------");
     return compressfile!.path;
   }

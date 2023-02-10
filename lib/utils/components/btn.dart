@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -10,10 +12,11 @@ import 'package:messageme/utils/firestore_helper.dart';
 import 'package:messageme/utils/storage_helper.dart';
 
 import '../../screen/controller/signup_controller.dart';
+import '../get_storage.dart';
 
 Widget loginbtn() {
   return SizedBox(
-    height: 60.h,
+    height: 60,
     width: double.infinity,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -26,9 +29,18 @@ Widget loginbtn() {
         String msg = await FireauthHelper.AuthHelper.CheckCustomUser(
             email: LoginController.Controller.txt_in_email.text,
             password: LoginController.Controller.txt_in_password.text);
+
         Get.snackbar("MessageMe", msg);
 
         if (msg == "User Success To Login") {
+          FirebaseFirestore.instance
+              .collection("profile")
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get()
+              .then((value) {
+            var mobile = value['Mobile'];
+            GetStorageHelper.Helper.Writedata(value: mobile, key: "usermobile");
+          });
           Get.offAllNamed("/home");
         }
       },
@@ -42,7 +54,7 @@ Widget loginbtn() {
 
 Widget signupbtn() {
   return SizedBox(
-    height: 60.h,
+    height: 60,
     width: double.infinity,
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
@@ -59,7 +71,7 @@ Widget signupbtn() {
       },
       child: const Text(
         "Create a new account",
-        style: TextStyle(fontSize: 16, color: Colors.black),
+        style: TextStyle(fontSize: 16 , color: Colors.black),
       ),
     ),
   );
@@ -118,6 +130,7 @@ Widget profilebtn({required String imgpath}) {
                   log("$imgpath egeoe");
                   if ((ProfilesetController.Controller.txt_name.text != "") &&
                       (ProfilesetController.Controller.txt_no.text != "") &&
+                      (ProfilesetController.Controller.txt_about.text != "") &&
                       (imgpath != "")) {
                     ProfilesetController.Controller.isbtn.value = true;
                     String? imglink =
@@ -125,7 +138,9 @@ Widget profilebtn({required String imgpath}) {
                     FirestoreHelper.firestore.ProfileData(
                         username: ProfilesetController.Controller.txt_name.text,
                         mobile: ProfilesetController.Controller.txt_no.text,
+                        aboutme: ProfilesetController.Controller.txt_about.text,
                         profileimg: imglink!);
+
                     Get.offAllNamed('/home');
                   } else {
                     Get.showSnackbar(const GetSnackBar(

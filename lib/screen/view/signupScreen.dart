@@ -61,6 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

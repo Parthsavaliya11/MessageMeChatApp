@@ -51,7 +51,7 @@ class FireauthHelper {
   }
 
   // Check User Login Or Not
-  bool isLogin()  {
+  bool isLogin() {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     if (firebaseAuth.currentUser != null) {
       return true;

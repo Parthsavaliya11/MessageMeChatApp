@@ -7,11 +7,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:messageme/screen/controller/chatpage_controller.dart';
 import 'package:messageme/screen/controller/searchuser_controller.dart';
-import 'package:messageme/screen/modal/ChatviewModel.dart';
 import 'package:messageme/utils/firestore_helper.dart';
 import 'package:messageme/utils/textthem.dart';
 import 'package:uuid/uuid.dart';
 
+import '../modal/ChatroomModel.dart';
 import '../modal/ProfileModel.dart';
 
 class SearchUser extends StatefulWidget {
@@ -78,7 +78,7 @@ class _SearchUserState extends State<SearchUser> {
                                         SearchuserController
                                             .Controller.founduser[index];
 
-                                    ChatviewModel chatroommodel = await getroom(
+                                    ChatroomModel chatroommodel = await getroom(
                                         username: SearchuserController
                                             .Controller
                                             .founduser[index]
@@ -156,9 +156,9 @@ class _SearchUserState extends State<SearchUser> {
   }
 }
 
-Future<ChatviewModel> getroom(
+Future<ChatroomModel> getroom(
     {required String targetuid, required String username}) async {
-  ChatviewModel chatroomModel;
+  ChatroomModel chatroomModel;
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("chatroom")
       .where("members.${FirebaseAuth.instance.currentUser!.uid}",
@@ -167,26 +167,14 @@ Future<ChatviewModel> getroom(
       .get();
   if (querySnapshot.docs.length > 0) {
     var data = querySnapshot.docs[0].data();
-    ChatviewModel exitingRoom = ChatviewModel.fromJson(data);
+    ChatroomModel exitingRoom = ChatroomModel.fromJson(data);
     chatroomModel = exitingRoom;
   } else {
-    ChatviewModel Newchatroommodel = ChatviewModel(
-        messages: [
-          Messages(
-              senderid: FirebaseAuth.instance.currentUser!.uid,
-              messageid: Uuid().v1(),
-              createAt: DateTime.now(),
-              seen: false,
-              text:
-                  "Hey,Welcome To MessageMe Chatting Platform & Staring Chat With $username")
-        ],
-        chatroomid: Uuid().v1(),
-        lastmessage:
-            "Hey,Welcome To MessageMe Chatting Platform & Staring Chat With $username",
-        members: {
-          targetuid: true,
-          FirebaseAuth.instance.currentUser!.uid: true,
-        });
+    ChatroomModel Newchatroommodel =
+        ChatroomModel(chatroomid: Uuid().v1(), lastmessage: "", members: {
+      targetuid: true,
+      FirebaseAuth.instance.currentUser!.uid: true,
+    });
     log("baki hatu bahi");
     await FirebaseFirestore.instance
         .collection("chatroom")

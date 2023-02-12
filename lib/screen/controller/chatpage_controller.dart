@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:messageme/screen/modal/ChatroomModel.dart';
 import 'package:messageme/screen/modal/ChatviewModel.dart';
 
 import '../modal/ChatModel.dart';
@@ -14,15 +17,17 @@ class ChatpageContrller extends GetxController {
   TextEditingController txt_chat = TextEditingController();
   String? Chatroomid;
   ChatviewModel chatList = ChatviewModel();
-  RxList<ChatviewModel> uiData = <ChatviewModel>[].obs;
+  RxList<ChatModel> uiData = <ChatModel>[].obs;
 
   void scrollToBottom() {
-    final bottomOffset = scrollController.position.maxScrollExtent;
+    //   final bottomOffset = scrollController.position.maxScrollExtent;
+    //
+    Timer(Duration(milliseconds: 100), () {
+      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    });
+  }
 
-    // scrollController.animateTo(
-    //    scrollController.position.maxScrollExtent,
-    //   duration: Duration(milliseconds: 100),
-    //   curve: Curves.easeInOut,
-    // );
+  void chatseen(int index) {
+
   }
 }

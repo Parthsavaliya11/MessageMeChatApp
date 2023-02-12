@@ -1,12 +1,11 @@
-import 'dart:convert';
 import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messageme/screen/modal/ChatModel.dart';
-import 'package:messageme/screen/modal/ChatroomModel.dart';
 
 import '../screen/controller/signup_controller.dart';
-import '../screen/modal/ChatviewModel.dart';
+import '../screen/modal/ChatroomModel.dart';
 
 class FirestoreHelper {
   FirestoreHelper._();
@@ -14,10 +13,11 @@ class FirestoreHelper {
   static final firestore = FirestoreHelper._();
 
   // For Create profile database
-  void ProfileData({required String username,
-    required String mobile,
-    required String profileimg,
-    required String aboutme}) {
+  void ProfileData(
+      {required String username,
+      required String mobile,
+      required String profileimg,
+      required String aboutme}) {
     FirebaseFirestore.instance
         .collection("profile")
         .doc(FirebaseAuth.instance.currentUser!.uid)
@@ -45,8 +45,8 @@ class FirestoreHelper {
       String searchKeywords) {
     return FirebaseFirestore.instance
         .collection(
-      "profile",
-    )
+          "profile",
+        )
         .where("Keywords", arrayContains: searchKeywords)
         .where("Email", isNotEqualTo: FirebaseAuth.instance.currentUser!.email)
         .snapshots();
@@ -55,11 +55,11 @@ class FirestoreHelper {
   // CREATING A NEW CHATROOM FOR USER NAD USER
 
   Future<String> CreateChatroom(
-      {required ChatviewModel chatroomModel, required String targetuid}) async {
+      {required ChatroomModel chatroomModel, required String targetuid}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("chatroom")
         .where("members.${FirebaseAuth.instance.currentUser!.uid}",
-        isEqualTo: true)
+            isEqualTo: true)
         .where("members.$targetuid", isEqualTo: true)
         .get();
     if (querySnapshot.docs.length > 0) {
@@ -75,41 +75,36 @@ class FirestoreHelper {
   }
 
   // CREATE CHATS BETWEEN TWO USERS
-  void SendMessage({required String chatroomid,
-    required ChatModel chatModel,
-    required String msg}) {
+  void SendMessage(
+      {required String chatroomid,
+      required ChatModel chatModel,
+      required String msg}) {
     if (msg != "") {
-      FirebaseFirestore.instance.collection("chatroom").doc(chatroomid).update({
-        "messages": FieldValue.arrayUnion([chatModel.toMap()])
-      });
+      FirebaseFirestore.instance
+          .collection("chatroom")
+          .doc(chatroomid)
+          .collection("msg")
+          .add(chatModel.toMap());
     }
   }
 
   ///// READ USER TO USER CHAT
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> readChat(
+  Stream<QuerySnapshot<Map<String, dynamic>>> readChat(
       {required String chatroomid}) {
-    FirebaseFirestore.instance
-        .collection("chatroom")
-        .where(chatroomid)
-        .orderBy("messages.createAt", descending: true)
-        .get()
-        .then((value) {
-      log("${value.docs[0].data()}");
-    });
-     FirebaseFirestore.instance
-        .collection("chatroom")
-        .doc(chatroomid)
-        .snapshots().listen((event) {
-          log("${event.data()!["messages"]}");
-     });
-
-
     return FirebaseFirestore.instance
         .collection("chatroom")
         .doc(chatroomid)
+        .collection("msg")
+        .orderBy("createAt", descending: true)
         .snapshots();
   }
+
+  ////// MESSAGE SEEN OR NOT
+  void seenUpdate({required String chatroomid}) {
+    FirebaseFirestore.instance
+        .collection("chatroom")
+        .doc(chatroomid)
+        .update({});
+  }
 }
-
-

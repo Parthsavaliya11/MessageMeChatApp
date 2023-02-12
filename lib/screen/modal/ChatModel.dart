@@ -8,7 +8,7 @@ class ChatModel {
   ChatModel(
       {this.senderid, this.messageid, this.text, this.seen, this.createAt});
 
-  ChatModel.fromMap(Map<String, dynamic> map) {
+  ChatModel.fromMap(dynamic map) {
     senderid = map["senderid"];
     messageid = map["messageid"];
     text = map["text"];

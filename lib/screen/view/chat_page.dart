@@ -71,52 +71,98 @@ class _ChatpageState extends State<Chatpage> {
                     {}
                     return Expanded(
                       child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          reverse: true,
-                          controller:
-                              ChatpageContrller.Controller.scrollController,
-                          itemCount:ChatpageContrller.Controller.uiData.length,
-                          itemBuilder: (context, index) {
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ChatBubble(
-                                alignment: Alignment.topRight,
-                                margin: EdgeInsets.only(left: 50),
-                                backGroundColor: bluecolor,
-                                clipper: ChatBubbleClipper5(
-                                    type: BubbleType.sendBubble),
-                                child: Text(
-                                  "",
-                                  style: simpleTextStyle(Colors.white, 16.sp),
-                                ),
-                              ),
-                            );
-                            // : Padding(
-                            //     padding: const EdgeInsets.all(8.0),
-                            //     child: ChatBubble(
-                            //       alignment: Alignment.topLeft,
-                            //       margin: EdgeInsets.only(right: 50),
-                            //       backGroundColor: Colors.grey,
-                            //       clipper: ChatBubbleClipper5(
-                            //           type: BubbleType.receiverBubble),
-                            //       child: Text(
-                            //         "${ChatpageContrller.Controller.uiData[0].messages![index].text}",
-                            //         style: simpleTextStyle(
-                            //             Colors.white, 16.sp),
-                            //       ),
-                            //     ),
-                            //   );
-                          }),
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        reverse: true,
+                        controller:
+                            ChatpageContrller.Controller.scrollController,
+                        itemCount: ChatpageContrller.Controller.uiData.length,
+                        itemBuilder: (context, index) {
+                          if (ChatpageContrller
+                                  .Controller.uiData[index].senderid !=
+                              FirebaseAuth.instance.currentUser!.uid) {
+                            if (ChatpageContrller
+                                    .Controller.uiData[index].seen ==
+                                false) {
+                              FirestoreHelper.firestore.seenUpdate(
+                                  chatroomid:
+                                      "${ChatpageContrller.Controller.Chatroomid}",
+                                  docid:
+                                      "${ChatpageContrller.Controller.uiData[index].messageid}");
+                            }
+                          }
+                          return ChatpageContrller.Controller.uiData.isEmpty
+                              ? const Center(
+                                  child: Text(
+                                    "Say,Hi To Your Friends",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                )
+                              : ChatpageContrller
+                                          .Controller.uiData[index].senderid ==
+                                      FirebaseAuth.instance.currentUser!.uid
+                                  ? Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ChatpageContrller.Controller
+                                                    .uiData[index].seen ==
+                                                false
+                                            ? Icon(
+                                                Icons.check,
+                                                color: Colors.grey,
+                                                size: 18.sp,
+                                              )
+                                            : Icon(
+                                                Icons.done_all,
+                                                color: bluecolor,
+                                                size: 18.sp,
+                                              ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: ChatBubble(
+                                            alignment: Alignment.topRight,
+                                            backGroundColor: bluecolor,
+                                            clipper: ChatBubbleClipper5(
+                                                type: BubbleType.sendBubble),
+                                            child: Text(
+                                              "${ChatpageContrller.Controller.uiData[index].text}",
+                                              style: simpleTextStyle(
+                                                  Colors.white, 16.sp),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ChatBubble(
+                                        alignment: Alignment.topLeft,
+                                        backGroundColor: Colors.grey,
+                                        clipper: ChatBubbleClipper5(
+                                            type: BubbleType.receiverBubble),
+                                        child: Text(
+                                          "${ChatpageContrller.Controller.uiData[index].text}",
+                                          style: simpleTextStyle(
+                                              Colors.white, 16.sp),
+                                        ),
+                                      ),
+                                    );
+                        },
+                      ),
                     );
                   } else if (snapshot.hasError) {
-                  }
-                  else {
-                    return Text("feg");
+                    return const Center(
+                      child: Text("Error Occure"),
+                    );
                   }
                 }
-                return  Center(
-                  child: CircularProgressIndicator(),
+
+                return Center(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               },
             ),
@@ -152,6 +198,7 @@ class _ChatpageState extends State<Chatpage> {
                                 text: ChatpageContrller.Controller.txt_chat.text
                                     .trim(),
                               );
+
                               FirestoreHelper.firestore.SendMessage(
                                 chatroomid:
                                     ChatpageContrller.Controller.Chatroomid!,
@@ -161,7 +208,7 @@ class _ChatpageState extends State<Chatpage> {
                               );
                               ChatpageContrller.Controller.scrollToBottom();
                             },
-                            icon: Icon(Icons.send),
+                            icon: const Icon(Icons.send),
                           ),
                           contentPadding: EdgeInsets.all(20),
                           border: InputBorder.none,

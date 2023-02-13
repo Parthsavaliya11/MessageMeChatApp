@@ -83,8 +83,8 @@ class FirestoreHelper {
       FirebaseFirestore.instance
           .collection("chatroom")
           .doc(chatroomid)
-          .collection("msg")
-          .add(chatModel.toMap());
+          .collection("msg").doc(chatModel.messageid.toString())
+          .set(chatModel.toMap());
     }
   }
 
@@ -101,10 +101,12 @@ class FirestoreHelper {
   }
 
   ////// MESSAGE SEEN OR NOT
-  void seenUpdate({required String chatroomid}) {
+  void seenUpdate({required String chatroomid, required String docid}) {
     FirebaseFirestore.instance
         .collection("chatroom")
         .doc(chatroomid)
-        .update({});
+        .collection("msg")
+        .doc(docid)
+        .update({"seen": true});
   }
 }

@@ -1,4 +1,5 @@
 class ChatModel {
+
   String? senderid;
   String? messageid;
   String? text;

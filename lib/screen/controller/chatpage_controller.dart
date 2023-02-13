@@ -23,7 +23,7 @@ class ChatpageContrller extends GetxController {
     //   final bottomOffset = scrollController.position.maxScrollExtent;
     //
     Timer(Duration(milliseconds: 100), () {
-      scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      scrollController.jumpTo(scrollController.position.minScrollExtent);
     });
   }
 

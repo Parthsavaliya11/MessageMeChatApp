@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,12 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       iconSize: 25,
                       icon: const Icon(Icons.search),
                       onPressed: () async {
-                        var snap = await FirebaseFirestore.instance
-                            .collection("chatroom")
-                            .doc("010804e0-a91a-11ed-b1c0-7d5a66a357bf")
-                            .collection("chats")
-                            .get();
-                        log("${snap.docs[0].data()}");
+
                       },
                     ),
                   ],
@@ -110,9 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 58.h,
                                       width: 58.h,
                                       child: CircleAvatar(
-                                        backgroundImage: NetworkImage(
-                                          "${list[index].profileimg}",
-                                        ),
+                                        backgroundImage: NetworkImage("${list[index].profileimg}",),
                                       ),
                                     ),
                                     trailing: Text(

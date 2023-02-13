@@ -6,9 +6,6 @@ import 'package:material_color_generator/material_color_generator.dart';
 import 'package:messageme/firebase_options.dart';
 import 'package:messageme/utils/routes.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -21,7 +18,7 @@ void main() async {
         return GetMaterialApp(
           theme: ThemeData(
 
-             primarySwatch: generateMaterialColor(
+            primarySwatch: generateMaterialColor(
               color: const Color(0xff3361E1),
             ),
           ),

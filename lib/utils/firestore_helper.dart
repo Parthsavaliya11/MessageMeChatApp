@@ -36,7 +36,11 @@ class FirestoreHelper {
 
   // ignore: non_constant_identifier_names
   Stream<QuerySnapshot<Map<String, dynamic>>> ReadProfile() {
-    return FirebaseFirestore.instance.collectionGroup("profile").snapshots();
+    return FirebaseFirestore.instance
+        .collection("chatroom")
+        .where("members.${FirebaseAuth.instance.currentUser!.uid}",
+            isEqualTo: true).where("field")
+        .snapshots();
   }
 
   // search user for chatting
@@ -83,7 +87,8 @@ class FirestoreHelper {
       FirebaseFirestore.instance
           .collection("chatroom")
           .doc(chatroomid)
-          .collection("msg").doc(chatModel.messageid.toString())
+          .collection("msg")
+          .doc(chatModel.messageid.toString())
           .set(chatModel.toMap());
     }
   }

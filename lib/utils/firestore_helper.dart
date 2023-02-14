@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messageme/screen/modal/ChatModel.dart';
+import 'package:messageme/screen/modal/ProfileModel.dart';
 
 import '../screen/controller/signup_controller.dart';
 import '../screen/modal/ChatroomModel.dart';
@@ -113,5 +114,16 @@ class FirestoreHelper {
         .collection("msg")
         .doc(docid)
         .update({"seen": true});
+  }
+
+  ////// READ HOME PROFILES /////////////////
+  Future<ProfileModel> profilebyUid(String uid) async {
+    ProfileModel profileModel = ProfileModel();
+    var docsnap =
+        await FirebaseFirestore.instance.collection("profile").doc(uid).get();
+    if (docsnap.data() != null) {
+      profileModel = ProfileModel.fromJson(docsnap.data());
+    }
+    return profileModel;
   }
 }

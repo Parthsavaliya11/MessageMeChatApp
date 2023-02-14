@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,9 @@ import 'package:messageme/screen/modal/ChatroomModel.dart';
 import 'package:messageme/screen/modal/ProfileModel.dart';
 import 'package:messageme/utils/firestore_helper.dart';
 import 'package:messageme/utils/textthem.dart';
+
+import '../../utils/components/profile_tile.dart';
+import '../controller/home_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -64,15 +68,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Text("${snapshot.error}");
                 } else if (snapshot.hasData) {
                   var snapshotData = snapshot.data!.docs;
+                  HomescreenController.Controller.chatroomdata = snapshotData
+                      .map((e) => ChatroomModel.fromJson(e.data()))
+                      .toList();
 
                   return ListView.builder(
-                      itemCount: snapshotData.length,
-                      itemBuilder: (context, index) {
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshotData.length,
+                    itemBuilder: (context, index) {
+                      log("${index}");
+                      ChatroomModel chatroomModel = ChatroomModel.fromJson(
+                        snapshotData[index].data(),
+                      );
+                      HomescreenController.Controller.parcipentskeys =
+                          chatroomModel.members!.keys.toList();
+                      HomescreenController.Controller.parcipentskeys
+                          .remove(FirebaseAuth.instance.currentUser!.uid);
 
-
-
-
-                      });
+                      return FutureBuilder(
+                          future: FirestoreHelper.firestore.profilebyUid(
+                              HomescreenController
+                                  .Controller.parcipentskeys[0]),
+                          builder: (context, data) {
+                            return profileTile(
+                                profileimg: '${data.data!.profileimg}',
+                                lastmsg:
+                                    '${HomescreenController.Controller.chatroomdata[index].lastmessage}',
+                                username: '${data.data!.username}');
+                          });
+                    },
+                  );
                 }
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),

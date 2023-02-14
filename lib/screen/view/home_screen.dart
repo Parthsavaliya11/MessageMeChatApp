@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:messageme/screen/controller/hometochatController.dart';
 import 'package:messageme/screen/modal/ChatroomModel.dart';
 import 'package:messageme/screen/modal/ProfileModel.dart';
 import 'package:messageme/utils/firestore_helper.dart';
@@ -91,13 +92,21 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .Controller.parcipentskeys[0]),
                           builder: (context, data) {
                             return profileTile(
-                                profileimg: '${data.data!.profileimg}',
-                                lastmsg:
-                                    '${HomescreenController.Controller.chatroomdata[index].lastmessage}',
-                                username: '${data.data!.username}',
-                                onTap: () {
-                                  Get.toNamed("/chatpage");
-                                });
+                              profileimg: '${data.data!.profileimg}',
+                              lastmsg:
+                                  '${HomescreenController.Controller.chatroomdata[index].lastmessage}',
+                              username: '${data.data!.username}',
+                              onTap: () {
+                                HometochatController.Controller.targetuser =
+                                    data.data!;
+                                HometochatController.Controller.Chatroomid =
+                                    HomescreenController.Controller
+                                        .chatroomdata[index].chatroomid;
+
+
+                                Get.toNamed("/hometochat");
+                              },
+                            );
                           });
                     },
                   );

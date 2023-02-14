@@ -26,7 +26,7 @@ class _ChatpageState extends State<Chatpage> {
         appBar: AppBar(
           primary: true,
           automaticallyImplyLeading: true,
-          toolbarHeight: 80,
+
           iconTheme: const IconThemeData(color: Colors.black),
           leading: IconButton(
             onPressed: () {

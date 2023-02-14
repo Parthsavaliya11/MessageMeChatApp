@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:messageme/screen/controller/hometochatController.dart';
 import 'package:uuid/uuid.dart';
 
@@ -23,11 +24,41 @@ class _HometoChatpageState extends State<HometoChatpage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          primary: true,
+          automaticallyImplyLeading: true,
+          iconTheme: const IconThemeData(color: Colors.black),
+          leading: IconButton(
+            onPressed: () {
+              Get.back();
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 8.0.w),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "${HometochatController.Controller.targetuser.profileimg}"),
+              ),
+            ),
+          ],
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title: Text(
+            "${HometochatController.Controller.targetuser.username}",
+            style: simpleTextStyle(Colors.black, 24.h, fw: FontWeight.w600),
+          ),
+        ),
         body: Column(
           children: [
             StreamBuilder(
               stream: FirestoreHelper.firestore.readChat(
-                chatroomid: ChatpageContrller.Controller.Chatroomid.toString(),
+                chatroomid:
+                    HometochatController.Controller.Chatroomid.toString(),
               ),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.active) {
@@ -49,7 +80,7 @@ class _HometoChatpageState extends State<HometoChatpage> {
                         itemCount:
                             HometochatController.Controller.uiData.length,
                         itemBuilder: (context, index) {
-                          if (ChatpageContrller
+                          if (HometochatController
                                   .Controller.uiData[index].senderid !=
                               FirebaseAuth.instance.currentUser!.uid) {
                             if (HometochatController

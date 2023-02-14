@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../modal/ChatModel.dart';
 import '../modal/ChatviewModel.dart';
+import '../modal/ProfileModel.dart';
 
 class HometochatController extends GetxController {
   HometochatController._();
@@ -16,6 +17,7 @@ class HometochatController extends GetxController {
   String? Chatroomid;
   ChatviewModel chatList = ChatviewModel();
   RxList<ChatModel> uiData = <ChatModel>[].obs;
+  ProfileModel targetuser = ProfileModel();
   void scrollToBottom() {
     //   final bottomOffset = scrollController.position.maxScrollExtent;
     //

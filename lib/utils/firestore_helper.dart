@@ -39,7 +39,7 @@ class FirestoreHelper {
     return FirebaseFirestore.instance
         .collection("chatroom")
         .where("members.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: true).where("field")
+            isEqualTo: true)
         .snapshots();
   }
 

@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:messageme/screen/modal/ChatroomModel.dart';
 import 'package:messageme/screen/modal/ProfileModel.dart';
 import 'package:messageme/utils/firestore_helper.dart';
 import 'package:messageme/utils/textthem.dart';
@@ -41,9 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       iconSize: 25,
                       icon: const Icon(Icons.search),
-                      onPressed: () async {
-
-                      },
+                      onPressed: () async {},
                     ),
                   ],
                   iconTheme: const IconThemeData(color: Colors.black),
@@ -64,58 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (snapshot.hasError) {
                   return Text("${snapshot.error}");
                 } else if (snapshot.hasData) {
-                  var z = snapshot.data!.docs;
-                  return StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection("profile")
-                          .where("Uid",
-                              isNotEqualTo:
-                                  FirebaseAuth.instance.currentUser!.uid)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          var z = snapshot.data!.docs;
-                          list =
-                              z.map((e) => ProfileModel.fromJson(e)).toList();
-                          return ListView.builder(
-                              physics: BouncingScrollPhysics(),
-                              itemCount: list.length,
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                                  child: ListTile(
-                                    subtitle: Text(
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      "${list[index].username}",
-                                      style: simpleTextStyle(
-                                          const Color(0xff9C9797), 14.sp,
-                                          fw: FontWeight.w400),
-                                    ),
-                                    title: Text(
-                                      "${list[index].aboutme}",
-                                      style: simpleTextStyle(
-                                          Colors.black, 16.sp,
-                                          fw: FontWeight.w400),
-                                    ),
-                                    leading: SizedBox(
-                                      height: 58.h,
-                                      width: 58.h,
-                                      child: CircleAvatar(
-                                        backgroundImage: NetworkImage("${list[index].profileimg}",),
-                                      ),
-                                    ),
-                                    trailing: Text(
-                                      "29 mar",
-                                      style: simpleTextStyle(
-                                          const Color(0xff74777F), 12.sp),
-                                    ),
-                                  ),
-                                );
-                              });
-                        }
-                        return Text("nah");
+                  var snapshotData = snapshot.data!.docs;
+
+                  return ListView.builder(
+                      itemCount: snapshotData.length,
+                      itemBuilder: (context, index) {
+
+
+
+
                       });
                 }
                 return Padding(

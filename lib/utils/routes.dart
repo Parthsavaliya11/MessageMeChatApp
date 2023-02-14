@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:messageme/screen/view/profile.dart';
 import 'package:messageme/screen/view/search_userpage.dart';
 import 'package:messageme/screen/view/chat_page.dart';
 import 'package:messageme/screen/view/home_screen.dart';
@@ -16,5 +17,6 @@ List<GetPage> routeList =[
   GetPage(name: '/profileset', page:() => const ProfileSetup(),),
   GetPage(name: '/chatpage', page:() => const Chatpage(),),
   GetPage(name: '/searchuser', page:() => const SearchUser(),),
+  GetPage(name: '/profile', page:() => const Profilepage(),),
 
 ];

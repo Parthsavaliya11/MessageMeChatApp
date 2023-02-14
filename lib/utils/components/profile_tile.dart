@@ -6,8 +6,9 @@ import '../textthem.dart';
 Widget profileTile(
     {required String lastmsg,
     required String username,
-    required String profileimg}) {
+    required String profileimg,required VoidCallback onTap}) {
   return ListTile(
+    onTap: onTap,
     subtitle: Text(
       maxLines: 1,
       overflow: TextOverflow.ellipsis,

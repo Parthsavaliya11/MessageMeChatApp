@@ -94,7 +94,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 profileimg: '${data.data!.profileimg}',
                                 lastmsg:
                                     '${HomescreenController.Controller.chatroomdata[index].lastmessage}',
-                                username: '${data.data!.username}');
+                                username: '${data.data!.username}',
+                                onTap: () {
+                                  Get.toNamed("/chatpage");
+                                });
                           });
                     },
                   );

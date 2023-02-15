@@ -53,6 +53,7 @@ dependencies:
   firebase_core: ^2.4.1
   flutter_chat_bubble: ^2.0.2
   app_popup_menu: ^1.0.0
+  fluttertoast: any
 dev_dependencies:
 
   flutter_test:

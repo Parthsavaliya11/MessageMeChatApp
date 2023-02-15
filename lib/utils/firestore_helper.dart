@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:messageme/screen/modal/ChatModel.dart';
 import 'package:messageme/screen/modal/ProfileModel.dart';
 
@@ -62,16 +65,25 @@ class FirestoreHelper {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("chatroom")
         .where("members.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: true & false)
-        .where("members.$targetuid", isEqualTo: true & false)
+            isEqualTo: true)
+        .where("members.$targetuid", isEqualTo: true)
         .get();
 
-    if (querySnapshot.docs.length > 0) {
+    if (querySnapshot.docs.isNotEmpty) {
     } else {
-      await FirebaseFirestore.instance
-          .collection("chatroom")
-          .doc(chatroomModel.chatroomid)
-          .set(chatroomModel.toJson());
+      ;
+      var Membervalues = chatroomModel.members!.values.toList();
+      log("${Membervalues[1]}");
+      if (Membervalues[0] == false || Membervalues[1] == false) {
+        Fluttertoast.showToast(msg: "User has been block");
+      } else {
+        await FirebaseFirestore.instance
+            .collection("chatroom")
+            .doc(chatroomModel.chatroomid)
+            .set(
+              chatroomModel.toJson(),
+            );
+      }
     }
   }
 

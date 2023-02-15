@@ -87,20 +87,18 @@ class _SearchUserState extends State<SearchUser> {
                                         targetuid: SearchuserController
                                             .Controller.founduser[index].uid!);
 
-                                    if (chatroommodel != null) {
-                                      await FirestoreHelper.firestore
-                                          .CreateChatroom(
-                                        chatroomModel: chatroommodel,
-                                        targetuid: SearchuserController
-                                            .Controller.founduser[index].uid
-                                            .toString(),
-                                      );
+                                    await FirestoreHelper.firestore
+                                        .CreateChatroom(
+                                      chatroomModel: chatroommodel,
+                                      targetuid: SearchuserController
+                                          .Controller.founduser[index].uid
+                                          .toString(),
+                                    );
 
-                                      ChatpageContrller.Controller.Chatroomid =
-                                          chatroommodel.chatroomid;
+                                    ChatpageContrller.Controller.Chatroomid =
+                                        chatroommodel.chatroomid;
 
-                                      Get.toNamed("/chatpage");
-                                    }
+                                    Get.toNamed("/chatpage");
                                   },
                                   child: ListTile(
                                     subtitle: Text(
@@ -161,9 +159,8 @@ Future<ChatroomModel> getroom(
   ChatroomModel chatroomModel;
   QuerySnapshot querySnapshot = await FirebaseFirestore.instance
       .collection("chatroom")
-      .where("members.${FirebaseAuth.instance.currentUser!.uid}",
-          isEqualTo: true)
-      .where("members.$targetuid", isEqualTo: true)
+      .where("${FirebaseAuth.instance.currentUser!.uid}")
+      .where("$targetuid")
       .get();
   if (querySnapshot.docs.length > 0) {
     var data = querySnapshot.docs[0].data();

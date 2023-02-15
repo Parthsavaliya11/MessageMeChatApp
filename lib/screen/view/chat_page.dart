@@ -232,9 +232,11 @@ class _ChatpageState extends State<Chatpage> {
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    FirestoreHelper.firestore.lastmsg(
-        chatroomid: ChatpageContrller.Controller.Chatroomid!,
-        lastMessage: ChatpageContrller.Controller.uiData.first.text!);
+    if (ChatpageContrller.Controller.uiData.isNotEmpty) {
+      FirestoreHelper.firestore.lastmsg(
+          chatroomid: ChatpageContrller.Controller.Chatroomid!,
+          lastMessage: ChatpageContrller.Controller.uiData.first.text!);
+    }
   }
 }
 

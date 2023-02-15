@@ -26,7 +26,6 @@ class _ChatpageState extends State<Chatpage> {
         appBar: AppBar(
           primary: true,
           automaticallyImplyLeading: true,
-
           iconTheme: const IconThemeData(color: Colors.black),
           leading: IconButton(
             onPressed: () {
@@ -227,6 +226,15 @@ class _ChatpageState extends State<Chatpage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    FirestoreHelper.firestore.lastmsg(
+        chatroomid: ChatpageContrller.Controller.Chatroomid!,
+        lastMessage: ChatpageContrller.Controller.uiData.first.text!);
   }
 }
 

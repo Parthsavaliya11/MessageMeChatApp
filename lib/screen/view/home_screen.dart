@@ -103,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     HomescreenController.Controller
                                         .chatroomdata[index].chatroomid;
 
-
                                 Get.toNamed("/hometochat");
                               },
                             );

@@ -12,7 +12,7 @@ Widget profileTile(
     subtitle: Text(
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
-      lastmsg,
+      lastmsg=="" ? "Say Hi Your Friends" : lastmsg,
       style:
           simpleTextStyle(const Color(0xff9C9797), 14.sp, fw: FontWeight.w400),
     ),

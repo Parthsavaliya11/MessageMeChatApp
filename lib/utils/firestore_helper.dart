@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:messageme/screen/modal/ChatModel.dart';
@@ -59,23 +57,21 @@ class FirestoreHelper {
 
   // CREATING A NEW CHATROOM FOR USER NAD USER
 
-  Future<String> CreateChatroom(
+  Future<void> CreateChatroom(
       {required ChatroomModel chatroomModel, required String targetuid}) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection("chatroom")
         .where("members.${FirebaseAuth.instance.currentUser!.uid}",
-            isEqualTo: true)
-        .where("members.$targetuid", isEqualTo: true)
+            isEqualTo: true & false)
+        .where("members.$targetuid", isEqualTo: true & false)
         .get();
+
     if (querySnapshot.docs.length > 0) {
-      return "already create";
     } else {
-      log("baki hatu bahi");
       await FirebaseFirestore.instance
           .collection("chatroom")
           .doc(chatroomModel.chatroomid)
           .set(chatroomModel.toJson());
-      return "not create";
     }
   }
 
@@ -125,5 +121,22 @@ class FirestoreHelper {
       profileModel = ProfileModel.fromJson(docsnap.data());
     }
     return profileModel;
+  }
+
+  //////////LAST MESSAGE ///////////////
+
+  void lastmsg({required String chatroomid, required String lastMessage}) {
+    FirebaseFirestore.instance
+        .collection("chatroom")
+        .doc(chatroomid)
+        .update({"lastmessage": lastMessage});
+  }
+
+  ////////////// USER BLOCK FEATURES //////////////
+  void blockUser({required String chatroomid, required String uid}) {
+    FirebaseFirestore.instance
+        .collection("chatroom")
+        .doc(chatroomid)
+        .update({"members.$uid": false});
   }
 }

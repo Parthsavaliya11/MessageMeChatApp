@@ -9,7 +9,6 @@ import 'package:uuid/uuid.dart';
 import '../../utils/constant/const_color.dart';
 import '../../utils/firestore_helper.dart';
 import '../../utils/textthem.dart';
-import '../controller/chatpage_controller.dart';
 import '../modal/ChatModel.dart';
 
 class HometoChatpage extends StatefulWidget {
@@ -37,13 +36,29 @@ class _HometoChatpageState extends State<HometoChatpage> {
             ),
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 8.0.w),
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "${HometochatController.Controller.targetuser.profileimg}"),
+            GestureDetector(
+              onTap: () {},
+              child: Padding(
+                padding: EdgeInsets.only(right: 8.0.w),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "${HometochatController.Controller.targetuser.profileimg}"),
+                ),
               ),
             ),
+            PopupMenuButton(itemBuilder: (contyxgt) {
+              return [
+                PopupMenuItem(
+                  onTap: () {
+                    FirestoreHelper.firestore.blockUser(
+                        uid: HometochatController.Controller.targetuser.uid!,
+                        chatroomid:
+                            HometochatController.Controller.Chatroomid!);
+                  },
+                  child: Text("Block User"),
+                ),
+              ];
+            }),
           ],
           centerTitle: true,
           backgroundColor: Colors.transparent,
@@ -182,7 +197,7 @@ class _HometoChatpageState extends State<HometoChatpage> {
                     ),
                     color: const Color(0xffeff1ff),
                     child: TextField(
-                      controller: ChatpageContrller.Controller.txt_chat,
+                      controller: HometochatController.Controller.txt_chat,
                       maxLines: 5,
                       clipBehavior: Clip.antiAlias,
                       minLines: 1,
@@ -231,5 +246,16 @@ class _HometoChatpageState extends State<HometoChatpage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if(HometochatController.Controller.uiData.isNotEmpty) {
+      FirestoreHelper.firestore.lastmsg(
+        chatroomid: HometochatController.Controller.Chatroomid!,
+        lastMessage: HometochatController.Controller.uiData.first.text!);
+    }
   }
 }
